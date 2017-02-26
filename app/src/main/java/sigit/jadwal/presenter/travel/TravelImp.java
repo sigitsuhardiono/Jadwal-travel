@@ -3,6 +3,7 @@ package sigit.jadwal.presenter.travel;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,6 @@ public class TravelImp implements TravelPresenter{
     @Override
     public void getPenumpang(String id_driver, String kota) {
         travelView.showLoading();
-        Log.e("ID driver",id_driver);
         APIinterface api = APIservice.getClient().create(APIinterface.class);
         Call<Listtravel> call= api.getListPenumpang(id_driver,kota);
         call.enqueue(new Callback<Listtravel>() {
@@ -53,7 +53,10 @@ public class TravelImp implements TravelPresenter{
 
             @Override
             public void onFailure(Call<Listtravel> call, Throwable t) {
-
+                if(t instanceof SocketTimeoutException){
+                    travelView.hideLoading();
+                    travelView.errorMessage("Waktu habis.Silakan coba lagi");
+                }
             }
         });
     }

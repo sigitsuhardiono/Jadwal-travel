@@ -1,8 +1,6 @@
 package sigit.jadwal.presenter.detiltravel;
 
-import android.util.Log;
-import android.widget.Toast;
-
+import java.net.SocketTimeoutException;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Locale;
@@ -67,7 +65,10 @@ public class DetiltravelImp implements DetiltravelPresenter{
 
             @Override
             public void onFailure(Call<Getpenumpang> call, Throwable t) {
-
+                if(t instanceof SocketTimeoutException){
+                    detiltravelView.hideLoading();
+                    detiltravelView.viewMessage("Waktu habis.Silakan coba lagi");
+                }
             }
         });
     }
@@ -86,7 +87,10 @@ public class DetiltravelImp implements DetiltravelPresenter{
 
             @Override
             public void onFailure(Call<Sms> call, Throwable t) {
-
+                if(t instanceof SocketTimeoutException){
+                    detiltravelView.hideLoading();
+                    detiltravelView.viewMessage("Waktu habis.Silakan coba lagi");
+                }
             }
         });
     }
@@ -105,7 +109,10 @@ public class DetiltravelImp implements DetiltravelPresenter{
 
             @Override
             public void onFailure(Call<Konfirmasi> call, Throwable t) {
-
+                if(t instanceof SocketTimeoutException){
+                    detiltravelView.hideLoading();
+                    detiltravelView.viewMessage("Waktu habis.Silakan coba lagi");
+                }
             }
         });
     }

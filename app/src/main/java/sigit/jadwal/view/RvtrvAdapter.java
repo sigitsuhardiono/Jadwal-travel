@@ -58,7 +58,7 @@ public class RvtrvAdapter extends RecyclerView.Adapter<RvtrvAdapter.ViewHolder> 
         holder.tvTitle.setText(rvData.get(position).getNama());
         holder.tvSubtitle.setText(rvData.get(position).getJam());
         if(rvData.get(position).getMetodeBayar().equals("LA")){
-            holder.tvHarga.setText("");
+            holder.tvHarga.setText("Lunas");
         }
         else{
             rupiahFormat = NumberFormat.getInstance(Locale.GERMANY);

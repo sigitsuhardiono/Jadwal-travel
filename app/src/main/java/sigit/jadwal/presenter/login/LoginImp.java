@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 
 import retrofit2.Call;
@@ -81,6 +82,10 @@ public class LoginImp implements LoginPresenter{
             }
             @Override
             public void onFailure(Call<Fcmtoken> call, Throwable t) {
+                if(t instanceof SocketTimeoutException){
+                    loginView.hideLoading();
+                    loginView.loginError("Waktu habis.Silakan coba lagi");
+                }
 
             }
         });
