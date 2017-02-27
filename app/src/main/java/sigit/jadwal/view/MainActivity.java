@@ -14,17 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import sigit.jadwal.R;
 import sigit.jadwal.preference.Preference;
@@ -40,6 +31,7 @@ public class MainActivity extends AppCompatActivity{
     Preference dtpref;
     String TAG = "MainActivity";
     String response;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,30 +112,41 @@ public class MainActivity extends AppCompatActivity{
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+            alertDialogBuilder.setMessage("GPS tidak jalan.")
                     .setCancelable(false)
-                    .setPositiveButton("Goto Settings Page To Enable GPS",
+                    .setPositiveButton("Silakan setting GPS anda",
                             new DialogInterface.OnClickListener(){
                                 public void onClick(DialogInterface dialog, int id){
-                                    Intent callGPSSettingIntent = new Intent(
-                                            android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                    callGPSSettingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    callGPSSettingIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                                    callGPSSettingIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                                    startActivity(callGPSSettingIntent);
+                                    Intent exit = new Intent(Intent.ACTION_MAIN);
+                                    exit.addCategory(Intent.CATEGORY_HOME);
+                                    exit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(exit);
                                 }
                             });
-            alertDialogBuilder.setNegativeButton("Cancel",
-                    new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface dialog, int id){
-                            Intent exit = new Intent(Intent.ACTION_MAIN);
-                            exit.addCategory(Intent.CATEGORY_HOME);
-                            exit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(exit);
-                        }
-                    });
             AlertDialog alert = alertDialogBuilder.create();
             alert.show();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CekGPS();
+    }
+
+    public void onWindowFocusChanged(boolean hasFocus)
+    {
+        try
+        {
+            if(hasFocus)
+            {
+                CekGPS();
+            }
+            else{
+            }
+        }
+        catch(Exception ex)
+        {
         }
     }
 }

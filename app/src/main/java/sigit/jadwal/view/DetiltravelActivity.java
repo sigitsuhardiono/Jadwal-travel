@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -81,6 +83,9 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
         Intent i = getIntent();
         detiltravelPresenter.getDetailPenumpang(dtpref.getUserDetails().get("id"),i.getExtras().getString("id_penumpang"));
         mapFragment.getMapAsync(this);
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker.remove();
+        }
     }
 
     @Override
@@ -253,6 +258,7 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Position");
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));
         if (mGoogleApiClient != null) {
@@ -293,5 +299,43 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
     @Override
     protected void onResume() {
         super.onResume();
+        CekGPS();
     }
+
+    public void onWindowFocusChanged(boolean hasFocus)
+    {
+        try
+        {
+            if(hasFocus)
+            {
+                CekGPS();
+            }
+            else{
+            }
+        }
+        catch(Exception ex)
+        {
+        }
+    }
+
+    private void CekGPS(){
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("GPS tidak jalan.")
+                    .setCancelable(false)
+                    .setPositiveButton("Silakan setting GPS anda",
+                            new DialogInterface.OnClickListener(){
+                                public void onClick(DialogInterface dialog, int id){
+                                    Intent exit = new Intent(Intent.ACTION_MAIN);
+                                    exit.addCategory(Intent.CATEGORY_HOME);
+                                    exit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(exit);
+                                }
+                            });
+            AlertDialog alert = alertDialogBuilder.create();
+            alert.show();
+        }
+    }
+
 }

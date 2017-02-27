@@ -2,6 +2,10 @@ package sigit.jadwal.view;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.LocationManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -57,4 +61,47 @@ public class ProfilActivity extends AppCompatActivity  implements ProfilView{
     public void hideLoading() {
         progressDialog.dismiss();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CekGPS();
+    }
+
+    public void onWindowFocusChanged(boolean hasFocus)
+    {
+        try
+        {
+            if(hasFocus)
+            {
+                CekGPS();
+            }
+            else{
+            }
+        }
+        catch(Exception ex)
+        {
+        }
+    }
+
+    private void CekGPS(){
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("GPS tidak jalan.")
+                    .setCancelable(false)
+                    .setPositiveButton("Silakan setting GPS anda",
+                            new DialogInterface.OnClickListener(){
+                                public void onClick(DialogInterface dialog, int id){
+                                    Intent exit = new Intent(Intent.ACTION_MAIN);
+                                    exit.addCategory(Intent.CATEGORY_HOME);
+                                    exit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(exit);
+                                }
+                            });
+            AlertDialog alert = alertDialogBuilder.create();
+            alert.show();
+        }
+    }
+
 }

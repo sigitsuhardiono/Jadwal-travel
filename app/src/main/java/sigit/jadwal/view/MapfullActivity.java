@@ -3,8 +3,10 @@ package sigit.jadwal.view;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -57,6 +59,9 @@ public class MapfullActivity extends AppCompatActivity implements OnMapReadyCall
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_full);
         mapFragment.getMapAsync(this);
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker.remove();
+        }
     }
 
     @Override
@@ -168,4 +173,47 @@ public class MapfullActivity extends AppCompatActivity implements OnMapReadyCall
     public void onConnectionSuspended(int i) {
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CekGPS();
+    }
+
+    public void onWindowFocusChanged(boolean hasFocus)
+    {
+        try
+        {
+            if(hasFocus)
+            {
+                CekGPS();
+            }
+            else{
+            }
+        }
+        catch(Exception ex)
+        {
+        }
+    }
+
+    private void CekGPS(){
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("GPS tidak jalan.")
+                    .setCancelable(false)
+                    .setPositiveButton("Silakan setting GPS anda",
+                            new DialogInterface.OnClickListener(){
+                                public void onClick(DialogInterface dialog, int id){
+                                    Intent exit = new Intent(Intent.ACTION_MAIN);
+                                    exit.addCategory(Intent.CATEGORY_HOME);
+                                    exit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(exit);
+                                }
+                            });
+            AlertDialog alert = alertDialogBuilder.create();
+            alert.show();
+        }
+    }
+
 }
