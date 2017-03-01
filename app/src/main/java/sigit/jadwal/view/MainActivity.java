@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.location.LocationManager;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import sigit.jadwal.R;
 import sigit.jadwal.preference.Preference;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity{
         View headerView = navigationView.getHeaderView(0);
         TextView username_nav = (TextView)headerView.findViewById(R.id.nama_user_nav);
         username_nav.setText(dtpref.getUserDetails().get("nama"));
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.i(TAG, "FCM Registration Token: " + token);
     }
 
     @Override

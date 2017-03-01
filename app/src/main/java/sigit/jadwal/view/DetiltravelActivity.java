@@ -234,6 +234,16 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+//        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+//        if (mLastLocation != null) {
+//            mMap.clear();
+//            LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+//            MarkerOptions markerOptions = new MarkerOptions();
+//            markerOptions.position(latLng);
+//            markerOptions.title("Current Position");
+//            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+//            mCurrLocationMarker = mMap.addMarker(markerOptions);
+//        }
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
@@ -245,7 +255,7 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Toast.makeText(this,"onConnectionSuspended",Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -255,12 +265,13 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
             mCurrLocationMarker.remove();
         }
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        //Toast.makeText(this,mCurrLocationMarker+"->"+String.valueOf(location.getLatitude())+"-"+String.valueOf(location.getLongitude()),Toast.LENGTH_SHORT).show();
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
@@ -268,7 +279,7 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Toast.makeText(this,"onConnectionFailed",Toast.LENGTH_SHORT).show();
     }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;

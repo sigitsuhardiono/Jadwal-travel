@@ -20,7 +20,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBSzK_KoxTyGDGcFfvGUBg2r8b4nryjdqI" />
+            android:value="AIzaSyDQAvtYW8IKgRSg3UFdfDZzwHc348ckUkM" />
         <!-- [START firebase_service] -->
         <service android:name=".firebase.MyFirebaseMessagingService">
             <intent-filter>
@@ -35,12 +35,16 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".view.MainActivity" />
+        <activity android:name=".view.MainActivity">
+            <intent-filter>
+                <action android:name=".view.JadwalActivity" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

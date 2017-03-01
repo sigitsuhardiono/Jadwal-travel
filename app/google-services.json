@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "140006452399",
-    "firebase_url": "https://jadwal-158413.firebaseio.com",
-    "project_id": "jadwal-158413",
-    "storage_bucket": "jadwal-158413.appspot.com"
+    "project_number": "222449434104",
+    "firebase_url": "https://projectone-160107.firebaseio.com",
+    "project_id": "projectone-160107",
+    "storage_bucket": "projectone-160107.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:140006452399:android:79a88855137985d8",
+        "mobilesdk_app_id": "1:222449434104:android:79a88855137985d8",
         "android_client_info": {
           "package_name": "sigit.jadwal"
         }
       },
       "oauth_client": [
         {
-          "client_id": "140006452399-bhtkgmftggdr6um47ptovehpeik8t46e.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "sigit.jadwal",
-            "certificate_hash": "4bc8117f5e7423f83d6477d99a91f1a08f47af34"
-          }
-        },
-        {
-          "client_id": "140006452399-2ngphlvh6pg38pi1nha188fhlnfqfpmv.apps.googleusercontent.com",
+          "client_id": "222449434104-afjc4pn1huaenic3c3d6mr5609o71jss.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAweKbl5GBGKWBvC0goOiVCBgR83KSPWGI"
+          "current_key": "AIzaSyAtSumdu0syl_Ws4fxscIwu4i8wCMd980o"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "140006452399-2ngphlvh6pg38pi1nha188fhlnfqfpmv.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
