@@ -160,7 +160,7 @@ public class MapfullActivity extends AppCompatActivity implements OnMapReadyCall
 
         int width = getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;
-        int padding = (int) (width * 0.10);
+        int padding = (int) (width * 0.20);
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
         mMap.animateCamera(cu);
         if (mGoogleApiClient != null) {
