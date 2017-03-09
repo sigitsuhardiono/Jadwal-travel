@@ -12,12 +12,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.w3c.dom.Text;
 
 import sigit.jadwal.R;
 import sigit.jadwal.preference.Preference;
@@ -29,10 +32,11 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class LoginActivity extends AppCompatActivity implements LoginView{
     LoginPresenter presenter;
     Preference dtpref;
-    Intent intentMain;
+    Intent intentForgot;
     Button buttonLogin;
     EditText user,pass;
     ProgressDialog progressDialog;
+    TextView textViewforgot;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +55,15 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
             @Override
             public void onClick(View v) {
                 presenter.login(user.getText().toString(), pass.getText().toString(),getApplicationContext());
+            }
+        });
+
+        textViewforgot = (TextView)findViewById(R.id.forgot_pass);
+        textViewforgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intentForgot = new Intent(v.getContext(),ForgotActivity.class);
+                startActivity(intentForgot);
             }
         });
     }

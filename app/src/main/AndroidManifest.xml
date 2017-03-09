@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
 
     <!-- Google MAP API key -->
     <application
@@ -38,13 +38,15 @@
         <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name=".view.JadwalActivity" />
-                <category android:name="android.intent.category.DEFAULT"/>
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -61,7 +63,9 @@
             android:parentActivityName=".view.MainActivity" />
         <activity
             android:name=".view.MapfullActivity"
-            android:parentActivityName=".view.DetiltravelActivity"/>
+            android:parentActivityName=".view.DetiltravelActivity" />
+        <activity android:name=".view.ForgotActivity" />
+        <activity android:name=".view.MapActivity"></activity>
     </application>
 
 </manifest>

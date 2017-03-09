@@ -30,6 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -157,12 +158,15 @@ public class MapfullActivity extends AppCompatActivity implements OnMapReadyCall
         builder.include(markerOptions.getPosition());
         builder.include(markerOptions2.getPosition());
         LatLngBounds bounds = builder.build();
-
-        int width = getResources().getDisplayMetrics().widthPixels;
-        int height = getResources().getDisplayMetrics().heightPixels;
-        int padding = (int) (width * 0.20);
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
-        mMap.animateCamera(cu);
+        
+        CameraPosition INIT =
+                new CameraPosition.Builder()
+                        .target(latLng)
+                        .zoom(25.5F)
+                        .bearing(location.getBearing()) // orientation
+                        .tilt( 90F) // viewing angle
+                        .build();
+        mMap.moveCamera( CameraUpdateFactory.newCameraPosition(INIT) );
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
@@ -382,6 +386,22 @@ public class MapfullActivity extends AppCompatActivity implements OnMapReadyCall
             // Drawing polyline in the Google Map for the i-th route
             mMap.addPolyline(lineOptions);
         }
+    }
+
+    private float getBearing(LatLng begin, LatLng end) {
+        double lat = Math.abs(begin.latitude - end.latitude);
+        double lng = Math.abs(begin.longitude - end.longitude);
+
+        if(begin.latitude < end.latitude && begin.longitude < end.longitude)
+            return (float)(Math.toDegrees(Math.atan(lng / lat)));
+        else if(begin.latitude >= end.latitude && begin.longitude < end.longitude)
+            return (float)((90 - Math.toDegrees(Math.atan(lng / lat))) + 90);
+        else if(begin.latitude >= end.latitude && begin.longitude >= end.longitude)
+            return  (float)(Math.toDegrees(Math.atan(lng / lat)) + 180);
+        else if(begin.latitude < end.latitude && begin.longitude >= end.longitude)
+            return (float)((90 - Math.toDegrees(Math.atan(lng / lat))) + 270);
+
+        return -1;
     }
 
 }

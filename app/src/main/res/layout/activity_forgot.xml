@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_login"
+    android:id="@+id/activity_forgot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="sigit.jadwal.view.LoginActivity"
+    tools:context="sigit.jadwal.view.ForgotActivity"
     android:background="@color/colorPrimary">
     <ScrollView
         android:layout_width="match_parent"
@@ -39,8 +39,13 @@
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="30dp">
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Masukan Username Anda"
+                        android:textSize="20dp"
+                        android:textColor="#000000"/>
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -56,33 +61,9 @@
                         android:singleLine="true"
                         android:hint="User Name"
                         android:inputType="text" />
-                    <TextView
+                    <Button android:id="@+id/btn_forgot"
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Password" />
-                    <EditText
-                        android:id="@+id/password"
-                        android:layout_width="fill_parent"
-                        android:textSize="15dp"
-                        android:layout_height="40dp"
-                        android:padding="10dp"
-                        android:hint="Password"
-                        android:inputType="textPassword"
-                        android:background="@drawable/form_border_rounded_corner"
-                        />
-                    <TextView
-                        android:id="@+id/forgot_pass"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:paddingTop="10dp"
-                        android:clickable="true"
-                        android:textColor="@color/colorPrimary"
-                        android:text="Forgot Password?" />
-                    <Button android:id="@+id/btn_login"
-                        android:layout_width="fill_parent"
-                        android:text="Log in"
+                        android:text="Kirim"
                         android:background="@drawable/button_bg_rounded_corners"
                         android:layout_marginTop="10dp"
                         android:padding="10dp"
@@ -90,16 +71,7 @@
                         android:textColor="@android:color/white"/>
                 </LinearLayout>
             </RelativeLayout>
-            <ImageButton
-                android:id="@+id/user_profile_photo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_below="@+id/login_title"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/user_rounded"
-                android:elevation="4dp"
-                android:src="@drawable/users"/>
         </RelativeLayout>
     </ScrollView>
+
 </RelativeLayout>
