@@ -52,7 +52,7 @@
                         android:layout_marginTop="10dp"
                         android:text="Username" />
                     <EditText
-                        android:id="@+id/username"
+                        android:id="@+id/forgotusername"
                         android:layout_width="fill_parent"
                         android:layout_height="40dp"
                         android:background="@drawable/form_border_rounded_corner"
