@@ -198,16 +198,22 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
                 detiltravelPresenter.kirimSms(id_driver,id_penumpang);
             }
         });
-
+        String is_jemput = detail_penumpang.get("is_antarjemput");
         buttonKonfAsal = (Button) findViewById(R.id.btn_konf_asal);
+        buttonKonfTujuan = (Button) findViewById(R.id.btn_konf_tujuan);
+        if(is_jemput.equals("1")){
+            buttonKonfAsal.setBackgroundResource(R.drawable.button_bg_rounded_corners_disable);
+        }
+        else if(is_jemput.equals("2")){
+            buttonKonfAsal.setBackgroundResource(R.drawable.button_bg_rounded_corners_disable);
+            buttonKonfTujuan.setBackgroundResource(R.drawable.button_bg_rounded_corners_disable);
+        }
         buttonKonfAsal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 detiltravelPresenter.konfAntarjemput(id_driver,id_penumpang,"jemput");
             }
         });
-
-        buttonKonfTujuan = (Button) findViewById(R.id.btn_konf_tujuan);
         buttonKonfTujuan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,7 +235,7 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public void viewMessage(String pesan) {
-        new AlertDialog.Builder(this).setMessage(pesan).setNeutralButton("Close", null).show();
+        new AlertDialog.Builder(this).setMessage(pesan).setNeutralButton("YA untuk lanjutkan", null).show();
     }
 
     @Override

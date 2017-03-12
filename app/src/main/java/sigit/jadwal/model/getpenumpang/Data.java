@@ -63,6 +63,9 @@ public class Data {
     @SerializedName("is_sms")
     @Expose
     private String isSms;
+    @SerializedName("is_antar_jemput")
+    @Expose
+    private String isAntarjemput;
 
     public String getId() {
         return id;
@@ -214,6 +217,14 @@ public class Data {
 
     public void setIsSms(String isSms) {
         this.isSms = isSms;
+    }
+
+    public String getIsAntarjemput() {
+        return isAntarjemput;
+    }
+
+    public void setIsAntarjemput(String isAntarjemput) {
+        this.isAntarjemput = isAntarjemput;
     }
 
 }

@@ -32,6 +32,7 @@ public class DetiltravelImp implements DetiltravelPresenter{
     public static final String KEY_LAT_TUJUAN = "lat_tujuan";
     public static final String KEY_LON_TUJUAN = "lon_tujuan";
     public static final String KEY_HARGA = "harga";
+    public static final String KEY_ANTARJEMPUT = "is_antarjemput";
     NumberFormat rupiahFormat;
     public  DetiltravelImp(DetiltravelView detiltravelView){
         this.detiltravelView = detiltravelView;
@@ -56,6 +57,7 @@ public class DetiltravelImp implements DetiltravelPresenter{
                 detail_penumpang.put(KEY_LON_JEMPUT, response.body().getData().getLngJemput());
                 detail_penumpang.put(KEY_LAT_TUJUAN, response.body().getData().getLatTujuan());
                 detail_penumpang.put(KEY_LON_TUJUAN, response.body().getData().getLngTujuan());
+                detail_penumpang.put(KEY_ANTARJEMPUT, response.body().getData().getIsAntarjemput());
                 rupiahFormat = NumberFormat.getInstance(Locale.GERMANY);
                 String rupiah = rupiahFormat.format(Double.parseDouble(response.body().getData().getHarga()));
                 detail_penumpang.put(KEY_HARGA, rupiah);
