@@ -31,6 +31,7 @@ public class RvtrvAdapter extends RecyclerView.Adapter<RvtrvAdapter.ViewHolder> 
         public TextView tvSubtitle;
         public TextView tvNomor;
         public TextView tvHarga;
+        public TextView tvJml;
         public CardView cardViewMlg;
 
         public ViewHolder(View v) {
@@ -39,6 +40,7 @@ public class RvtrvAdapter extends RecyclerView.Adapter<RvtrvAdapter.ViewHolder> 
             tvSubtitle = (TextView) v.findViewById(R.id.tv_subtitle);
             tvHarga = (TextView) v.findViewById(R.id.tv_harga);
             tvNomor = (TextView) v.findViewById(R.id.tv_nomor);
+            tvJml = (TextView) v.findViewById(R.id.tv_jml);
             cardViewMlg = (CardView) v.findViewById(R.id.cdViewMlg);
         }
     }
@@ -57,6 +59,7 @@ public class RvtrvAdapter extends RecyclerView.Adapter<RvtrvAdapter.ViewHolder> 
         holder.tvNomor.setText(Integer.toString(position+1)+". ");
         holder.tvTitle.setText(rvData.get(position).getNama());
         holder.tvSubtitle.setText(rvData.get(position).getJam());
+        holder.tvJml.setText(rvData.get(position).getJml());
         if(rvData.get(position).getMetodeBayar().equals("LA")){
             holder.tvHarga.setText("Lunas");
         }
