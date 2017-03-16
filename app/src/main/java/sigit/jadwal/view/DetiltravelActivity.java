@@ -64,6 +64,9 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
     LinearLayout linearLayoutjemput,linearLayouttujuan;
     Button buttonTelp,buttonSms,buttonKonfAsal,buttonKonfTujuan;
     ImageButton imageButtonDirection;
+    private static final int GPS_TIME_INTERVAL = 60000*5; // get gps location every 5 min
+    private static final int GPS_DISTANCE= 1000; // set the distance value in meter
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

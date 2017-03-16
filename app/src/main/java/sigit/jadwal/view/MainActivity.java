@@ -14,12 +14,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.location.LocationManager;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.ArrayList;
+
 import sigit.jadwal.R;
+import sigit.jadwal.adapter.ChatArrayAdapter;
 import sigit.jadwal.preference.Preference;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -33,7 +37,9 @@ public class MainActivity extends AppCompatActivity{
     Preference dtpref;
     String TAG = "MainActivity";
     String response;
-
+    private ArrayList<String> dataSet;
+    ListView listViewChat;
+    private ChatArrayAdapter chatArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +83,13 @@ public class MainActivity extends AppCompatActivity{
         username_nav.setText(dtpref.getUserDetails().get("nama"));
         String token = FirebaseInstanceId.getInstance().getToken();
         Log.i(TAG, "FCM Registration Token: " + token);
+        dataSet = new ArrayList<>();
+        initDataset();
+        listViewChat = (ListView) findViewById(R.id.listView1);
+
+        chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.chat_message,dataSet);
+        listViewChat.setAdapter(chatArrayAdapter);
+
     }
 
     @Override
@@ -153,4 +166,10 @@ public class MainActivity extends AppCompatActivity{
         {
         }
     }
+
+    private void initDataset(){
+        dataSet.add("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dapibus.");
+        dataSet.add("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sagittis.");
+    }
+
 }
