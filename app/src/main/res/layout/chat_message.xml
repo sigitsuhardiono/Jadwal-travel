@@ -6,16 +6,18 @@
     <LinearLayout
         android:id="@+id/singleMessageContainer"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dip"
+        android:paddingTop="10dip">
 
         <TextView
             android:id="@+id/singleMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center|top"
             android:layout_margin="5dip"
             android:background="@drawable/out_message_bg"
-            android:paddingLeft="10dip"
+            android:paddingLeft="20dip"
             android:text="Hello bubbles!"
             android:textColor="@android:color/primary_text_light" />
     </LinearLayout>

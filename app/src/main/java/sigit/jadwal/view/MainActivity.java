@@ -1,9 +1,17 @@
 package sigit.jadwal.view;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,7 +25,15 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.location.LocationManager;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
@@ -25,10 +41,13 @@ import java.util.ArrayList;
 import sigit.jadwal.R;
 import sigit.jadwal.adapter.ChatArrayAdapter;
 import sigit.jadwal.preference.Preference;
+import sigit.jadwal.presenter.lokasi.LokasiImp;
+import sigit.jadwal.presenter.lokasi.LokasiPresenter;
+import sigit.jadwal.presenter.lokasi.LokasiView;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,LokasiView {
     Intent intentJadwal,intentProfil;
     Toolbar toolbarMain;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -40,6 +59,13 @@ public class MainActivity extends AppCompatActivity{
     private ArrayList<String> dataSet;
     ListView listViewChat;
     private ChatArrayAdapter chatArrayAdapter;
+    /*load lokasi preference*/
+    LokasiPresenter lokasiPresenter;
+    /*for update location*/
+    GoogleApiClient mGoogleApiClient;
+    LocationRequest mLocationRequest;
+    GoogleMap mMap;
+    Location mLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +78,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         dtpref = new Preference(getApplicationContext());
         dtpref.checkLogin();
+        lokasiPresenter = new LokasiImp(this);
         toolbarMain = (Toolbar)findViewById(R.id.toolbarMain);
         toolbarMain.setTitle("Beranda");
         setSupportActionBar(toolbarMain);
@@ -172,4 +199,88 @@ public class MainActivity extends AppCompatActivity{
         dataSet.add("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sagittis.");
     }
 
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
+
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Location Permission Needed")
+                        .setMessage("This app needs the Location permission, please accept to use location functionality")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ActivityCompat.requestPermissions(MainActivity.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION );
+                            }
+                        })
+                        .create()
+                        .show();
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION );
+            }
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Toast.makeText(this,"onConnected",Toast.LENGTH_SHORT).show();
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(60000*5);
+        mLocationRequest.setFastestInterval(60000*5);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Toast.makeText(this,"onLocationChanged",Toast.LENGTH_SHORT).show();
+        lokasiPresenter.sendLokasi(dtpref.getUserDetails().get("id"),String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()));
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Toast.makeText(this,"onMapReady",Toast.LENGTH_SHORT).show();
+        mMap = googleMap;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                buildGoogleApiClient();
+                mMap.setMyLocationEnabled(true);
+            } else {
+                checkLocationPermission();
+            }
+        }
+        else {
+            buildGoogleApiClient();
+            mMap.setMyLocationEnabled(true);
+        }
+    }
+
+    @Override
+    public void viewMessage(String pesan) {
+        Toast.makeText(this,pesan,Toast.LENGTH_SHORT).show();
+    }
 }

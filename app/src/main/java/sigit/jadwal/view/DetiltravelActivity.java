@@ -47,10 +47,13 @@ import sigit.jadwal.preference.Preference;
 import sigit.jadwal.presenter.detiltravel.DetiltravelImp;
 import sigit.jadwal.presenter.detiltravel.DetiltravelPresenter;
 import sigit.jadwal.presenter.detiltravel.DetiltravelView;
+import sigit.jadwal.presenter.lokasi.LokasiImp;
+import sigit.jadwal.presenter.lokasi.LokasiPresenter;
+import sigit.jadwal.presenter.lokasi.LokasiView;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class DetiltravelActivity extends AppCompatActivity implements OnMapReadyCallback,DetiltravelView,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class DetiltravelActivity extends AppCompatActivity implements OnMapReadyCallback,DetiltravelView,LokasiView,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     Toolbar toolbarDetilJadwal;
     GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
@@ -59,6 +62,7 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
     Marker mCurrLocationMarker;
     ProgressDialog progressDialog;
     DetiltravelPresenter detiltravelPresenter;
+    LokasiPresenter lokasiPresenter;
     Preference dtpref;
     TextView dtlnamatrn,dtljamtrn,dtlalamatjemput,dtlalamattujuan,dtlharga;
     LinearLayout linearLayoutjemput,linearLayouttujuan;
@@ -82,6 +86,7 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_travel);
         detiltravelPresenter = new DetiltravelImp(this);
+        lokasiPresenter = new LokasiImp(this);
         dtpref = new Preference(getApplicationContext());
         Intent i = getIntent();
         detiltravelPresenter.getDetailPenumpang(dtpref.getUserDetails().get("id"),i.getExtras().getString("id_penumpang"));
@@ -243,19 +248,9 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-//        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-//        if (mLastLocation != null) {
-//            mMap.clear();
-//            LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-//            MarkerOptions markerOptions = new MarkerOptions();
-//            markerOptions.position(latLng);
-//            markerOptions.title("Current Position");
-//            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-//            mCurrLocationMarker = mMap.addMarker(markerOptions);
-//        }
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setInterval(60000*5);
+        mLocationRequest.setFastestInterval(60000*5);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -273,6 +268,7 @@ public class DetiltravelActivity extends AppCompatActivity implements OnMapReady
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
         }
+        lokasiPresenter.sendLokasi(dtpref.getUserDetails().get("id"),String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()));
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         //Toast.makeText(this,mCurrLocationMarker+"->"+String.valueOf(location.getLatitude())+"-"+String.valueOf(location.getLongitude()),Toast.LENGTH_SHORT).show();
         MarkerOptions markerOptions = new MarkerOptions();

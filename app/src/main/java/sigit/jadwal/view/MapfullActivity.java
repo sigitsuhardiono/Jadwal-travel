@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -51,16 +52,22 @@ import java.util.List;
 
 import sigit.jadwal.R;
 import sigit.jadwal.direction.DirectionsJSONParser;
+import sigit.jadwal.preference.Preference;
+import sigit.jadwal.presenter.lokasi.LokasiImp;
+import sigit.jadwal.presenter.lokasi.LokasiPresenter;
+import sigit.jadwal.presenter.lokasi.LokasiView;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MapfullActivity extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MapfullActivity extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,LokasiView {
     Toolbar toolbarMap;
     GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     Location mLastLocation;
     Marker mCurrLocationMarker,mPointMarker;
+    Preference dtpref;
+    LokasiPresenter lokasiPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +80,7 @@ public class MapfullActivity extends AppCompatActivity implements OnMapReadyCall
         setContentView(R.layout.activity_mapfull);
         toolbarMap = (Toolbar)findViewById(R.id.toolbarMapFull);
         toolbarMap.setTitle("Map View");
+        lokasiPresenter = new LokasiImp(this);
         setSupportActionBar(toolbarMap);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_full);
@@ -140,8 +148,8 @@ public class MapfullActivity extends AppCompatActivity implements OnMapReadyCall
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
         }
-
-
+        dtpref = new Preference(getApplicationContext());
+        lokasiPresenter.sendLokasi(dtpref.getUserDetails().get("id"),String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()));
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
@@ -162,14 +170,14 @@ public class MapfullActivity extends AppCompatActivity implements OnMapReadyCall
         CameraPosition INIT =
                 new CameraPosition.Builder()
                         .target(latLng)
-                        .zoom(25.5F)
+                        .zoom(20.5F)
                         .bearing(location.getBearing()) // orientation
                         .tilt( 90F) // viewing angle
                         .build();
         mMap.moveCamera( CameraUpdateFactory.newCameraPosition(INIT) );
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
+//        if (mGoogleApiClient != null) {
+//            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+//        }
 
         String url = getDirectionsUrl(latLng, latLng2);
 
@@ -186,8 +194,8 @@ public class MapfullActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setInterval(60000*5);
+        mLocationRequest.setFastestInterval(60000*5);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -298,6 +306,11 @@ public class MapfullActivity extends AppCompatActivity implements OnMapReadyCall
             urlConnection.disconnect();
         }
         return data;
+    }
+
+    @Override
+    public void viewMessage(String pesan) {
+        Toast.makeText(this,pesan,Toast.LENGTH_SHORT).show();
     }
 
     // Fetches data from url passed

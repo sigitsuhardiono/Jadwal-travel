@@ -15,6 +15,7 @@ import sigit.jadwal.model.getpenumpang.Getpenumpang;
 import sigit.jadwal.model.konfirmasi.Konfirmasi;
 import sigit.jadwal.model.listtravel.Listtravel;
 import sigit.jadwal.model.login.Login;
+import sigit.jadwal.model.lokasi.Lokasi;
 import sigit.jadwal.model.sms.Sms;
 
 /**
@@ -49,5 +50,9 @@ public interface APIinterface {
     @FormUrlEncoded
     @POST("travel/send_reset_code")
     Call<Forgot> sendResetcode(@Field("username") String username);
+
+    @FormUrlEncoded
+    @POST("travel/update_location")
+    Call<Lokasi> sendlokasi(@Field("id_driver") String id_driver, @Field("lat") String latitute, @Field("lng") String longitude);
 
 }
